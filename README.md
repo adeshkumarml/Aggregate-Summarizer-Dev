@@ -8,7 +8,7 @@ This is a mini-utility service consisting of:
 * **Frontend** – User interface<br>
 
 ## Project Structure
-Will be updated
+Will be updated.
 
 ## Getting Started
 Setup instructions and documentation will be added soon.
