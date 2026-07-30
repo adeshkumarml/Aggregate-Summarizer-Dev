@@ -33,6 +33,10 @@ services:
 
     ports:
       - "80:80"
+      - "443:443"
+    
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
 
     depends_on:
       - backend
@@ -49,6 +53,7 @@ services:
 
     ports:
       - "6379:6379"
+    # this is being exposed, can remove since it can communicate using Docker's internal network, keeping it for now though
 
     restart: unless-stopped
 
