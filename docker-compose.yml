@@ -9,9 +9,9 @@ services:
 
     container_name: aggregate-summarizer-backend
 
-    ports:
-      - "8000:8000"
-      # remove in production
+    # ports:
+    #  - "8000:8000"
+    # removed for production
 
     env_file:
       - ./backend/.env
