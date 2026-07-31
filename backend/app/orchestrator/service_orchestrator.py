@@ -65,6 +65,10 @@ class Orchestrator:
 
 
     async def _update_job(self, state: JobState):
+
+        #temporary
+        print(f"{state.stage} | {state.progress} | {state.status}")
+        
         await redis_client.save_job(f"job:{state.job_id}", state.model_dump_json())
 
     
