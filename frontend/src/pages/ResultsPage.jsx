@@ -27,19 +27,33 @@ function ResultsPage(){
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     useEffect(() => {
+        let cancelled = false;
+        let timeoutId;
         async function fetchResults() {
+            if (cancelled) return;
+
             try {
                 const response = await getResults(jobId);
+                if (cancelled) return;
                 setResults(response);
-            }
+                setLoading(false);
+            } 
             catch (err) {
+                if (cancelled) return;
+                if (err.message === "NOT_READY") {
+                    timeoutId = setTimeout(fetchResults, 2000);
+                    return;
+                }
                 setError(err.message);
-            }
-            finally {
                 setLoading(false);
             }
         }
+        
         fetchResults();
+        return () => {
+            cancelled = true;
+            clearTimeout(timeoutId);
+        };
     }, [jobId]);
 
      async function handleDownload(format) {

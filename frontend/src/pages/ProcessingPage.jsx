@@ -16,45 +16,53 @@ function ProcessingPage(){
     const [statusLabel, setStatusLabel] = useState("Preparing document...");
     const fileName = location.state?.fileName || "Document";
     const fileSize = location.state?.fileSize ? `${(location.state.fileSize / (1024 * 1024)).toFixed(2)} MB`: "--";
-    useEffect(() => {
-        let intervalId;
+    useEffect(() => { 
+        let cancelled = false; 
+        let timeoutId;
         async function pollStatus() {
+            if (cancelled) return;
+
             try {
                 const response = await getJobStatus(jobId);
+                if (cancelled) return;
                 setProgress(response.progress);
                 switch (response.status) {
                     case "queued":
                         setStatusLabel("Waiting in queue...");
                         break;
+
                     case "processing":
                         setStatusLabel("Generating summaries...");
                         break;
+
                     case "completed":
                         setProgress(100);
-                        clearInterval(intervalId);
-                        navigate(`/results/${jobId}`, {state: location.state});
-                        break;
+                        navigate(`/results/${jobId}`, {state: location.state,});
+                        return;
+
                     case "failed":
-                        clearInterval(intervalId);
                         alert("Document processing failed.");
-                        break;
+                        return;
+
                     default:
                         setStatusLabel("Processing...");
-
-                }
-
+                }   
             }
+
             catch (error) {
-                console.error(error);
-                // clearInterval(intervalId);
-                // remove this after verification
+                console.error("Polling failed:", error);
+                // Ignore transient failures and retry
             }
-        }
 
+            timeoutId = setTimeout(pollStatus, 1000);
+        }
         pollStatus();
-        intervalId = setInterval(pollStatus, 1000);
-        return () => clearInterval(intervalId);
-    }, [jobId, navigate]);
+
+        return () => { 
+            cancelled = true; 
+            clearTimeout(timeoutId); 
+        } ;
+    }, [jobId, navigate, location.state]);
 
     return (
         <>
