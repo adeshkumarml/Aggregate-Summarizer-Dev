@@ -10,6 +10,17 @@ from app.api.routes.export import router as export_router
 import os
 origins = os.getenv("CORS_ALLOW_ORIGINS", "").split(",")
 
+# temporary
+import time
+import asyncio
+
+async def heartbeat():
+    counter = 0
+    while True:
+        counter += 1
+        print(f"[HB {counter}] {time.strftime('%H:%M:%S')}")
+        await asyncio.sleep(1)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,7 +28,15 @@ async def lifespan(app: FastAPI):
     if not redis_okay:
         raise RuntimeError("Failed to connect to Redis.")
     print("Redis connected successfully!")
+
+    # temporary
+    heartbeat_task = asyncio.create_task(heartbeat())
+
     yield
+
+    # temporary
+    heartbeat_task.cancel
+
     await redis_client.close()
     print("Redis connection closed!")
 
