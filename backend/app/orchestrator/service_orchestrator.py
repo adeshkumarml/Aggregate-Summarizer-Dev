@@ -12,6 +12,9 @@ from fastapi import UploadFile
 
 import asyncio
 
+# temporary
+import time
+
 
 class Orchestrator:
     def __init__(self):
@@ -32,12 +35,19 @@ class Orchestrator:
             chunks = self.chunker.chunk_text(document_text)
             
             await self._update_job(JobState(job_id = job_id, status = JobStatus.PROCESSING, stage = JobStage.SUMMARIZING, progress = PROGRESS["SUMMARIZING"]))
+
+            #temporary
+            print("Before provider gatherer", time.time())
+
             providers = []
             for selected_model in metadata.selected_models:
                 provider_name = self._get_provider_name(selected_model)
                 providers.append(ProviderFactory.get_provider(provider_name = provider_name, model_name = selected_model))
 
             provider_results = await asyncio.gather(*[provider.summarize(chunks, metadata.summary_style) for provider in providers], return_exceptions = True)
+
+            #temporary
+            print("After provider gatherer", time.time())
 
             successful_results = [result for result in provider_results if not isinstance(result, Exception)]
             if not successful_results:
