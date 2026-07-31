@@ -28,10 +28,12 @@ export async function getJobStatus(jobId) {
 
 export async function getResults(jobId) {
     const response = await fetch(`${API_BASE_URL}/results/${jobId}`);
-    if (!response.ok) {
-        throw new Error("Failed to fetch results.");
+    if (response.status === 404) {
+        throw new Error("NOT_READY");
     }
-
+    if (!response.ok) {
+        throw new Error(`HTTP_${response.status}`);
+    }
     return await response.json();
 }
 
