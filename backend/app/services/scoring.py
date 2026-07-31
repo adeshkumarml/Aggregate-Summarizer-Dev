@@ -4,6 +4,9 @@ import numpy as np
 import tiktoken
 import re
 
+#temp
+import time
+
 class Scoring:
     def __init__(self):
         self.embedding = Embedding()
@@ -12,7 +15,12 @@ class Scoring:
 
     def _semantic_similarity_scores(self, model_results: list[ModelResult]) -> dict[str, float]:
         summaries = [result.summary for result in model_results]
+        #temporary
+        t = time.perf_counter()
         embeddings = self.embedding.embed_text_batch(summaries)
+        #temporary
+        print(f"Semantic embedding: {time.perf_counter()-t:.2f}s")
+
         scores = {}
         for i, result in enumerate(model_results):
             similarities = []
@@ -43,8 +51,13 @@ class Scoring:
             return {
                 result.model_name: 0.0 for result in model_results
             }
-        
+
+        #temporary
+        t = time.perf_counter()
         document_embeddings = self.embedding.embed_text_batch(document_sentences)
+        #temporary
+        print(f"Document embedding: {time.perf_counter()-t:.2f}s")
+
         scores = {}
 
         for result in model_results:
@@ -54,14 +67,24 @@ class Scoring:
                 scores[result.model_name] = 0.0
                 continue
 
+            #temporary
+            t = time.perf_counter()    
             summary_embeddings = self.embedding.embed_text_batch(summary_sentences)
+            #temporary
+            print(f"{result.model_name}: summary embedding {time.perf_counter()-t:.2f}s")
+
             covered_sentences = 0
 
             for document_emb in document_embeddings:
+                #temp
+                t = time.perf_counter()
                 similarities = [np.dot(document_emb, summary_emb) for summary_emb in summary_embeddings]
                 max_sim = max(similarities)
                 if max_sim >= similarity_threshold:
                     covered_sentences += 1
+
+            #temp
+            print(f"{result.model_name}: similarity loop {time.perf_counter()-t:.2f}s")
 
             scores[result.model_name] = covered_sentences / len(document_sentences)
 
