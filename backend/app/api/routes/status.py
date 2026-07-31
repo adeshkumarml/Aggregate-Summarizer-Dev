@@ -7,6 +7,9 @@ router = APIRouter(prefix = "/status")
 
 @router.get("/{job_id}", response_model = StatusResponse)
 async def get_status(job_id: str):
+
+    #temporary
+    print(f"Status requested: {job_id}")
     
     job = await redis_client.get_job(f"job:{job_id}")
     if job is None:
