@@ -54,6 +54,7 @@ class Scoring:
 
         #temporary
         t = time.perf_counter()
+        print(len(document_sentences)) # temp, remove this line later
         document_embeddings = self.embedding.embed_text_batch(document_sentences)
         #temporary
         print(f"Document embedding: {time.perf_counter()-t:.2f}s")
@@ -68,7 +69,8 @@ class Scoring:
                 continue
 
             #temporary
-            t = time.perf_counter()    
+            t = time.perf_counter()
+            print(len(summary_sentences)) # temporary, remove later    
             summary_embeddings = self.embedding.embed_text_batch(summary_sentences)
             #temporary
             print(f"{result.model_name}: summary embedding {time.perf_counter()-t:.2f}s")
