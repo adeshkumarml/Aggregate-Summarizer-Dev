@@ -46,7 +46,8 @@ function ProcessingPage(){
             }
             catch (error) {
                 console.error(error);
-                clearInterval(intervalId);
+                // clearInterval(intervalId);
+                // remove this after verification
             }
         }
 
