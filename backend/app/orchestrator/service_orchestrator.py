@@ -62,9 +62,14 @@ class Orchestrator:
             await self._update_job(JobState(job_id = job_id, status = JobStatus.PROCESSING, stage = JobStage.SCORING, progress = PROGRESS["SCORING"]))
             #temporary
             t = time.perf_counter()
-            evaluations = self.scoring.evaluate(document_text, successful_results)
+            await asyncio.sleep(180)
+            # evaluations = self.scoring.evaluate(document_text, successful_results)
+            evaluations = {} # remove after debugging
+            # uncomment above code later
             # temp
             print(f"Scoring: {time.perf_counter() - t:.2f}s")
+
+            #temp
 
             await self._update_job(JobState(job_id = job_id, status = JobStatus.PROCESSING, stage = JobStage.CONSOLIDATING, progress = PROGRESS["CONSOLIDATING"]))
             # temp
