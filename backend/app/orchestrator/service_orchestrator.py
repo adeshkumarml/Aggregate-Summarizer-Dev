@@ -29,34 +29,47 @@ class Orchestrator:
         
         try:
             await self._update_job(JobState(job_id = job_id, status = JobStatus.PROCESSING, stage = JobStage.PARSING, progress = PROGRESS["PARSING"]))    
+            # temporary
+            t = time.perf_counter()
             document_text = await self.parser.extract_text(file)
-            
+            # temporary
+            print(f"Parsing: {time.perf_counter() - t:.2f}s")
+
             await self._update_job(JobState(job_id = job_id, status = JobStatus.PROCESSING, stage = JobStage.CHUNKING, progress = PROGRESS["CHUNKING"]))
+            # temporary
+            t = time.perf_counter()
             chunks = self.chunker.chunk_text(document_text)
-            
+            # temp
+            print(f"Chunking: {time.perf_counter() - t:.2f}s")
+
             await self._update_job(JobState(job_id = job_id, status = JobStatus.PROCESSING, stage = JobStage.SUMMARIZING, progress = PROGRESS["SUMMARIZING"]))
 
             #temporary
-            print("Before provider gatherer", time.time())
-
+            t = time.perf_counter()
             providers = []
             for selected_model in metadata.selected_models:
                 provider_name = self._get_provider_name(selected_model)
                 providers.append(ProviderFactory.get_provider(provider_name = provider_name, model_name = selected_model))
 
             provider_results = await asyncio.gather(*[provider.summarize(chunks, metadata.summary_style) for provider in providers], return_exceptions = True)
-
             #temporary
-            print("After provider gatherer", time.time())
+            print(f"Provider gather: {time.perf_counter() - t:.2f}s")
 
             successful_results = [result for result in provider_results if not isinstance(result, Exception)]
             if not successful_results:
                 raise RuntimeError("All models failed!")
             
             await self._update_job(JobState(job_id = job_id, status = JobStatus.PROCESSING, stage = JobStage.SCORING, progress = PROGRESS["SCORING"]))
+            #temporary
+            t = time.perf_counter()
             evaluations = self.scoring.evaluate(document_text, successful_results)
+            # temp
+            print(f"Scoring: {time.perf_counter() - t:.2f}s")
 
             await self._update_job(JobState(job_id = job_id, status = JobStatus.PROCESSING, stage = JobStage.CONSOLIDATING, progress = PROGRESS["CONSOLIDATING"]))
+            # temp
+            t = time.perf_counter()
+            print("Entering consolidate")
             consolidated_output = await self.consolidator.consolidate(successful_results, evaluations, metadata.summary_style)
 
             await self._update_job(JobState(job_id = job_id, status = JobStatus.COMPLETED, stage = JobStage.COMPLETED, progress = PROGRESS["COMPLETED"],
@@ -69,6 +82,9 @@ class Orchestrator:
                                                 "consolidated": consolidated_output.model_dump()
                                             }
                                         ))
+            # temp
+            print("Leaving consolidate")
+            print(f"Consolidation: {time.perf_counter() - t:.2f}s")
         
         except Exception as e:
             await self._update_job(JobState(job_id = job_id, status = JobStatus.FAILED, progress = 100, error = str(e)))
