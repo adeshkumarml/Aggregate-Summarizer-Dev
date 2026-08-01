@@ -25,7 +25,7 @@ async def get_results(job_id: str):
         evaluation = state.result["evaluations"][result["model_name"]]
         scores[result["model_name"]] = ScoreResponse(
             semantic_sim = evaluation["semantic_sim"],
-            coverage_score = evaluation["coverage_score"],
+            coverage_score = evaluation.get("coverage_score"),  # disabled metric
             compression_ratio = evaluation["compression_ratio"],
             latency_secs = result["latency_secs"],
             total_tokens = result["total_tokens"],
