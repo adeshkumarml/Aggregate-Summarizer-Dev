@@ -19,11 +19,11 @@ class Consolidation:
         for result in model_results:
             eval = evaluations[result.model_name]
             prompt += f"""MODEL: {result.model_name}
-                SEMANTIC AGREEEMENT: {eval.semantic_sim:.2f}
-                COVERAGE SCORE: {eval.coverage_score:.2f}
-                SUMMARY: {result.summary}
-                """
-        
+                SEMANTIC AGREEEMENT: {eval.semantic_sim:.2f}"""
+            if eval.coverage_score is not None:
+                prompt += f"COVERAGE SCORE: {eval.coverage_score:.2f}\n"
+            prompt += f"SUMMARY: {result.summary}"
+                
         return prompt
 
 
