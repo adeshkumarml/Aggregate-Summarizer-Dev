@@ -1,4 +1,4 @@
-import { FileText } from "lucide-react";
+import { TriangleAlert } from "lucide-react";
 
 function ResultsHeader({/*({ fileName, fileSize }8*/} ){
     
@@ -6,7 +6,19 @@ function ResultsHeader({/*({ fileName, fileSize }8*/} ){
         <section className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 md:text-4xl">Summaries Ready!</h1>
             <p className="mx-auto mt-4 max-w-2xl text-sm text-gray-600 md:text-base">Your document has been successfully summarized.</p>
-            
+
+            <div className="mx-auto mt-8 flex max-w-3xl items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
+                <TriangleAlert size={22} className="mt-0.5 flex-shrink-0 text-amber-600" />
+                <div>
+                    <p className="font-medium text-amber-900">Results are stored temporarily.</p>
+                    <p className="mt-1 text-sm text-amber-800">
+                        Summaries will expire after <strong>30 minutes</strong>.
+                        Please download your PDF or DOCX if you'd like to keep
+                        them.
+                    </p>
+                </div>
+            </div>
+ 
             {/*<div className="mt-8 flex justify-center">
                 <div className="flex w-full max-w-md items-center gap-4 rounded-xl border border-blue-200 bg-white p-5">
                     
