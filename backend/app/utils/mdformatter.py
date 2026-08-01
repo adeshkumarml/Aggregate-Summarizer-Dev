@@ -9,10 +9,10 @@ def clean_markdown(text: str) -> str:
     text = re.sub(r"_(.*?)_", r"\1", text)
 
     # Heading marker
-    text = re.sub(r"^#{1,6}\s*", "", text, flags = re.MULTILINE)
+    text = re.sub(r"^#{1,6}\s*(.+)$", r"\n\1\n", text, flags = re.MULTILINE)
     
     # Bullets marker
-    text = re.sub(r"^\s*[-*+]\s*", "• ", text, flags = re.MULTILINE)
+    text = re.sub(r"^\s*[-*+]\s*", "\n• ", text, flags = re.MULTILINE)
     
     # Numbered lists
     text = re.sub(r"^\s*(\d+)\.\s*", r"\1. ", text, flags = re.MULTILINE)
