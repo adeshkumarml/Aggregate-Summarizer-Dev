@@ -1,4 +1,5 @@
 from app.models.domain_models import ModelResult, EvaluationResult
+from app.config.config import ENABLE_COVERAGE_SCORING
 from app.services.embedding import Embedding
 import numpy as np
 import tiktoken
@@ -119,7 +120,10 @@ class Scoring:
 
     def evaluate(self, source_document: str, model_results: list[ModelResult]) -> dict[str, EvaluationResult]:
         semantic_scores = self._semantic_similarity_scores(model_results)
-        coverage_scores = self._coverage_scores(source_document, model_results)
+        # dormanting coverage_score feature
+        coverage_scores = {}
+        if ENABLE_COVERAGE_SCORING:
+            coverage_scores = self._coverage_scores(source_document, model_results)
         latency_ranks = self._latency_ranks(model_results)
         cost_ranks = self._cost_ranks(model_results)
         evaluations = {}
@@ -127,7 +131,7 @@ class Scoring:
         for result in model_results:
             evaluations[result.model_name] = EvaluationResult(
                 semantic_sim = semantic_scores[result.model_name],
-                coverage_score= coverage_scores[result.model_name],
+                coverage_score= coverage_scores[result.model_name] if ENABLE_COVERAGE_SCORING else None, # dormant
                 compression_ratio = self._compression_ratio(source_document, result.summary),
                 latency_rank = latency_ranks[result.model_name],
                 cost_rank = cost_ranks[result.model_name]

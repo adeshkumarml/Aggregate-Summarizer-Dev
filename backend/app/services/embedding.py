@@ -4,8 +4,8 @@ import numpy as np
 class Embedding:
     def __init__(self):
         # self.model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-mpnet-base-v2")
-        # The above model is too heavy for production on constrained cloud instances.
-        self.model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-mpnet-base-v2")
+        # The above model is too heavy for production on constrained cloud instances. 
+        self.model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
     def embed_text_single(self, text: str) -> np.ndarray:
         if not text.strip():
