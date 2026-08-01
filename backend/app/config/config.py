@@ -36,6 +36,9 @@ MAX_PARALLEL_REQS = 5
 
 SIMILARITY_THRESHOLD = 0.7
 
+ENABLE_COVERAGE_SCORING = False
+# Coverage score calculation is very heavy and slow, constrained for production server, hence keeping this setting to false to disable this metric.
+
 PROGRESS = {
     "PARSING": 15,
     "CHUNKING": 30,
