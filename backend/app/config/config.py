@@ -68,6 +68,26 @@ SUMMARY_STYLE_CONFIG = {
     }
 }
 
+CONSOLIDATION_STYLE_CONFIG = {
+    "concise": {
+        "ratio": 0.30,
+        "min_tokens": 250,
+        "max_tokens": 700
+    },
+
+    "comprehensive": {
+        "ratio": 0.50,
+        "min_tokens": 500,
+        "max_tokens": 1800
+    },
+
+    "detailed": {
+        "ratio": 0.75,
+        "min_tokens": 900,
+        "max_tokens": 2500
+    }
+}
+
 MODEL_COSTS = {
     "gpt-4o-mini": {
         "input": 0.15,
