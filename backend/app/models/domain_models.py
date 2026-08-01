@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 from pydantic import BaseModel
 
 class SummaryStyle(str, Enum):
@@ -46,7 +47,7 @@ class ConsolidatedResult(BaseModel):
 
 class EvaluationResult(BaseModel):
     semantic_sim: float
-    coverage_score: float
+    coverage_score: Optional[float] = None  # refer config.py lines 39-40 for details 
     compression_ratio: float
     latency_rank: int
     cost_rank: int

@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class UploadResponse(BaseModel):
     job_id: str 
@@ -12,7 +13,7 @@ class StatusResponse(BaseModel):
 
 class ScoreResponse(BaseModel):
     semantic_sim: float
-    coverage_score: float
+    coverage_score: Optional[float] = None # refer config.py lines 39-40 for details
     compression_ratio: float
     latency_secs: float
     total_tokens: int
