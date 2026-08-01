@@ -33,7 +33,7 @@ function Navbar() {
                     <a href="https://github.com/adeshkumarml/Aggregate-Summarizer-Dev" className="hover:text-blue-600 transition" target="_blank" rel="noopener noreferrer">
                         Documentation
                     </a>
-                    <a href="mailto:adesh.ks2002@gmail.com" className="hover:text-blue-600 transition">
+                    <a href="mailto:adesh.ks2002@gmail.com?subject=Aggregate%20Summarizer%20Feedback" className="hover:text-blue-600 transition">
                         Feedback
                     </a>
                 </div>
