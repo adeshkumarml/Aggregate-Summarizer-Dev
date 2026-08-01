@@ -6,13 +6,14 @@ import GenerateButton from "../components/GenerateButton";
 import HowToUse from "../components/HowToUse";
 import Footer from "../components/Footer";
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { uploadDocument } from "../services/api";
 
 function UploadPage(){
 
     const navigate = useNavigate();
+    const location = useLocation();
     const [selectedFile, setSelectedFile] = useState(null);
     const [uploadError, setUploadError] = useState("");
     const [selectedModels, setSelectedModels] = useState([]);
@@ -20,6 +21,15 @@ function UploadPage(){
     const [isUploading, setIsUploading] = useState(false);
     const [apiError, setApiError] = useState("");
     const canGenerate = selectedFile !== null && selectedModels.length >= 1 && selectedModels.length <= 3;
+
+    useEffect(() => {
+        if (location.state?.scrollTo === "how-to-use") {const section = document.getElementById("how-to-use");
+            if (section) {
+                section.scrollIntoView({behavior: "smooth", block: "start",});
+            }
+            window.history.replaceState({}, document.title);
+        }
+    }, [location]);
     
     const handleGenerate = async () => {
         if (!selectedFile) {

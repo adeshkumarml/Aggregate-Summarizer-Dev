@@ -32,7 +32,18 @@ function ProcessingPage(){
                         break;
 
                     case "processing":
-                        setStatusLabel("Generating summaries...");
+                        if (response.progress <= 15)
+                            setStatusLabel("Extracting text...");
+                        else if (response.progress <= 30)
+                            setStatusLabel("Preparing document...");
+                        else if (response.progress <= 60)
+                            setStatusLabel("Generating AI summaries...");
+                        else if (response.progress <= 80)
+                            setStatusLabel("Evaluating summaries...");
+                        else if (response.progress <= 90)
+                            setStatusLabel("Building final summary...");
+                        else
+                            setStatusLabel("Finishing up...");
                         break;
 
                     case "completed":
