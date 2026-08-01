@@ -69,7 +69,7 @@ function SummaryCard({ title, subtitle, summary, metrics, isConsolidated = false
             {showMetrics && (
                 <div className="mt-5 rounded-xl border border-gray-200 bg-gray-50 p-5">
                     <div className="grid gap-4 sm:grid-cols-2">
-                        {Object.entries(metrics).map(([key, value]) => (
+                        {Object.entries(metrics).filter(([_, value]) => value !== null && value !== undefined).map(([key, value]) => (
                             <div key={key}>
                                 <p className="text-sm text-gray-500">{metricLabels[key] ?? key}</p>
                                 <p className="mt-1 font-medium text-gray-900">{formatMetric(key, value)}</p>
