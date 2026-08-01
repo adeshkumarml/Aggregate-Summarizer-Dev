@@ -11,7 +11,7 @@ services:
 
     # ports:
     #  - "8000:8000"
-    # removed for production
+    # removed for production, uncomment for development, and vice-versa
 
     env_file:
       - ./backend/.env
@@ -34,9 +34,12 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    # comment above ports and uncomment the following line for development and vice-versa
+    #  - "8080:80"
     
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
+    # comment above lines during development, and uncomment before pushing in git
 
     depends_on:
       - backend
