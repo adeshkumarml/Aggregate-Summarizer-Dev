@@ -37,7 +37,7 @@ class Consolidation:
 
         prompt = self._build_prompt(model_results, evaluations, style)
         est_input_tokens = len(self.tokenizer.encode(prompt))
-        config = CONSOLIDATION_PROMPT[style.value]
+        config = CONSOLIDATION_STYLE_CONFIG[style.value]
         max_output_tokens = int(est_input_tokens * config["ratio"]) + 100
         max_output_tokens = max(config["min_tokens"], max_output_tokens)
         max_output_tokens = min(config["max_tokens"], max_output_tokens)
