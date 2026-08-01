@@ -49,21 +49,34 @@ class Export:
         title_style = ParagraphStyle("TitleUnicode", parent = styles["Title"], fontName = "NotoSansCJK")
         heading1_style = ParagraphStyle("Heading1Unicode", parent = styles["Heading1"], fontName = "NotoSansCJK")
         heading2_style = ParagraphStyle("Heading2Unicode", parent = styles["Heading2"], fontName = "NotoSansCJK")
-        normal_style = ParagraphStyle("NormalUnicode", parent = styles["Normal"], fontName = "NotoSansCJK", fontSize = 12, leading = 18)
+        normal_style = ParagraphStyle("NormalUnicode", parent = styles["Normal"], fontName = "NotoSansCJK", fontSize = 11, leading = 20, spaceAfter = 8)
 
         elements = []
         elements.append(Paragraph("<b>Consolidated Summary</b>", title_style))
         elements.append(Spacer(1, 12))
+
         elements.append(Paragraph(f"Document: {original_filename}", normal_style))
         elements.append(Spacer(1, 20))
-        elements.append(Paragraph(clean_markdown(consolidated.summary), normal_style))
+
+        summary = clean_markdown(consolidated.summary)
+        for paragraph in summary.split("\n\n"):
+            if paragraph.strip():
+                elements.append(Paragraph(paragraph.replace("\n", "<br/>"), normal_style))
+                elements.append(Spacer(1, 8))
+
         elements.append(Spacer(1, 20))
+
         elements.append(Paragraph("<b>Supporting Summaries</b>", heading1_style))
 
         for result in model_results:
             elements.append(Paragraph(f"<b>Summary by: {result.model_name}</b>", heading2_style))
-            elements.append(Paragraph(clean_markdown(result.summary), normal_style))
-            elements.append(Spacer(1, 10))
+            elements.append(Spacer(1, 6))
+            
+            summary = clean_markdown(result.summary)
+            for paragraph in summary.split("\n\n"):
+                if paragraph.strip():
+                    elements.append(Paragraph(paragraph.replace("\n", "<br/>"), normal_style))
+                    elements.append(Spacer(1, 8))
         
         document.build(elements)
         buffer.seek(0)
