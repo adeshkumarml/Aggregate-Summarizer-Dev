@@ -1,4 +1,4 @@
-from app.config.config import GEMINI_API_KEY, DEFAULT_TEMPERATURE, SUMMARY_STYLE_CONFIG
+from app.config.config import GEMINI_API_KEY, DEFAULT_TEMPERATURE, CONSOLIDATION_STYLE_CONFIG
 from app.config.prompts import CONSOLIDATION_PROMPT, STYLE_PROMPTS
 from app.models.domain_models import ModelResult, EvaluationResult, ConsolidatedResult, SummaryStyle
 from google import genai
@@ -37,8 +37,8 @@ class Consolidation:
 
         prompt = self._build_prompt(model_results, evaluations, style)
         est_input_tokens = len(self.tokenizer.encode(prompt))
-        config = SUMMARY_STYLE_CONFIG[style.value]
-        max_output_tokens = int(est_input_tokens * config["ratio"])
+        config = CONSOLIDATION_PROMPT[style.value]
+        max_output_tokens = int(est_input_tokens * config["ratio"]) + 100
         max_output_tokens = max(config["min_tokens"], max_output_tokens)
         max_output_tokens = min(config["max_tokens"], max_output_tokens)
 
