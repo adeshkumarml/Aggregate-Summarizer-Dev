@@ -10,7 +10,7 @@ function ProgressBar({ progress, label = "Summarizing..." }){
 
              <div className="relative h-3 w-full overflow-hidden rounded-full bg-gray-200">
                 <div className="relative h-full overflow-hidden rounded-full bg-blue-600 transition-all duration-500 ease-in-out" style={{ width: `${progress}%` }}>
-                    <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/60 to-transparent"/>
+                    <div className="absolute top-0 left-0 h-full w-1/3 -translate-x-full animate-[shimmer_2.2s_linear_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent"/>
                 </div>  
             </div>
         </div>
